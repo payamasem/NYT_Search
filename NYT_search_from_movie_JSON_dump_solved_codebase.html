@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>NYT Search</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-3">New York Times Search</h1>
+    <p class="lead">Use this form to search through the New York Times article database!</p>
+  </div>
+</div>
+
+<div class="form-group row">
+  <label for="search-term-input" class="col-2 col-form-label">Search Term:</label>
+  <div class="col-10">
+    <input class="form" type="search_term" value="" id="search_term_input">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="number-records-input" class="col-2 col-form-label">Number of Records to Retrieve:</label>
+  <div class="col-10">
+    <input class="form" type="number_of_records" value="" id="records_input">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="start-year-input" class="col-2 col-form-label">Start Year:</label>
+  <div class="col-10">
+    <input class="form" type="start_year" value="" id="start_year_input">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="end-year-input" class="col-2 col-form-label">End Year:</label>
+  <div class="col-10">
+    <input class="form" type="end_year" value="" id="end_year_input">
+  </div>
+</div>
+
+<button type="submit" id="articleGo" class="btn btn-primary">Search</button>
+</form>
+<button type="clear" class="btn btn-primary">Clear</button>
+</form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+
+      var userSearch = $('#search_term_input');
+        console.log(userSearch);
+      var recordsSearch = $('#records_input');
+      var startYear = $('#start_year_input');
+      var endYear = $('#end_year_input');
+
+      // This .on("click") function will trigger the AJAX Call
+      $("#articleGo").on("click", function(event) {
+        console.log(event)
+        // event.preventDefault() can be used to prevent an event's default behavior.
+        // Here, it prevents the submit button from trying to submit a form when clicked
+        event.preventDefault();
+
+        var article = [];
+//    for (var i = 0; i < response.data.length; i++) { 
+//        article[i] = $("#search_term_input").val();
+
+        var authKey = "4203bf02fccb485fb779aff9674a7de6";
+        var queryURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" + authKey + "&q=" + userSearch + "&begin_date = " + startYear + "&end_date = " + endYear;
+
+        console.log(startYear.value);
+
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).done(function(response) {
+          $("#articleGo").text(JSON.stringify(response));
+          console.log(typeof(response));
+          console.log(typeof(JSON.stringify(response)));
+          // $("#movie-view").text([1,2,3]);//sends values
+          // $("#movie-view").text(JSON.stringify({key:"Value"}));//sends [object Object]
+        });
+        // -----------------------------------------------------------------------
+      });
+
+/*
+      var newDiv = $('<div>');
+      var newImage = $('<img>');
+      newImage.attr('src', response.data[i].images.fixed_height.url);
+      var p = $('<p>').text("RATED:  " + response.data[i].rating);
+      newDiv.append(newImage);
+      newDiv.append(p);
+      $('#gifs-appear-here').append(newDiv);
+*/
+    </script>
+  </div>
+</body>
+</html>
